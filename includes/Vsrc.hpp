@@ -9,12 +9,22 @@ further push to GStreamer buffer*/
 
 #include <bits/stdc++.h>
 
-class Vsrc{
-    private:
-        
-        static void NeedSource(GstAppSrc* appsrc, gpointer userData){
-            //get the source and convert to frames
-            
-        }
+struct userVar{
+    std::string SourceName; 
+    cv::VideoCapture cap; 
+}vars; 
+
+//analyse the source and return in the valid type
+//initally the source is treated as string 
+auto sourceAnalyzer(){
+    
+}
+
+static void NeedSource(GstAppSrc *appsrc, gpointer userData){
+    //initalize the gstreamer handles 
+    GstBuffer *Buffer; 
+    GstFlowReturn ret; 
+    GstMapInfo map; 
+    vars.cap()
 
 }
