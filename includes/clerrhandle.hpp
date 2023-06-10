@@ -15,9 +15,22 @@ class ErrorHandle{
             switch(err){
                 case CL_INVALID_VALUE:
                     std::cerr << "Error: The Platform is Null"; 
+
+                case CL_INVALID_PROPERTY:
+                    std::cerr << "Error: The value specified for supported property 
+                    is not valid";
+
+                case CL_INVALID_DEVICE_TYPE:
+                    std::cerr << "Error: Device type is not valid"; 
                 
+                case CL_DEVICE_NOT_AVAILABLE:
+                    std::cerr << "Error: No specified devices are not available";
+                
+                case CL_DEVICE_NOT_FOUND:
+                    std::cerr << "Error; no devices which specified are found";
+
                 default:
-                    std::cerr << "Un-Identified Error Flag" << std::endl;
+                    std::cerr << "Error: Un-Identified Error Flag" << std::endl;
             }
         }
 }
