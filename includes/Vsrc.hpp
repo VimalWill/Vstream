@@ -71,6 +71,9 @@ class SrcHandle{
             Srcloc = SrcDir; 
             SrcType = SrcCl;
 
+            //initalize the detector 
+            HWDetector().Detector();
+
         }
 
         static void NeedSource(GstAppSrc *appsrc, gpointer user_data){
@@ -87,7 +90,7 @@ class SrcHandle{
                     //AI Inference and Overlay function 
                     if (HWFlag){
                         //use NVIDIA GPU
-                        
+
                     }
 
                     
