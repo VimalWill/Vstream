@@ -18,16 +18,16 @@ class ErrorHandle{
 
                 case CL_INVALID_PROPERTY:
                     std::cerr << "Error: The value specified for supported property 
-                    is not valid";
+                    is not valid" << std::endl;
 
                 case CL_INVALID_DEVICE_TYPE:
-                    std::cerr << "Error: Device type is not valid"; 
+                    std::cerr << "Error: Device type is not valid" << std::endl;
                 
                 case CL_DEVICE_NOT_AVAILABLE:
-                    std::cerr << "Error: No specified devices are not available";
+                    std::cerr << "Error: No specified devices are not available" << std::endl;
                 
                 case CL_DEVICE_NOT_FOUND:
-                    std::cerr << "Error; no devices which specified are found";
+                    std::cerr << "Error; no devices which specified are found" << std::endl;
 
                 default:
                     std::cerr << "Error: Un-Identified Error Flag" << std::endl;

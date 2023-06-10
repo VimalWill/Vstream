@@ -2,11 +2,14 @@
 #include <bits/stdc++.h>
 
 #include <includes/clerrhandle.hpp>
+#include <includes/Vinfra.hpp>
 #include <opencv2/opencv.hpp>
 
 #include <gst/gst.h>
 #include <gst/app/gstappsrc.h>
 #include <gst/app/app.h>
+
+bool HWFlag = false; 
 
 class HWDetector{
     private:
@@ -17,7 +20,7 @@ class HWDetector{
         std::string HW = "NVIDIA";
         cl_int err;
 
-        bool HWFlag = false;
+        //bool HWFlag = false;
 
     public:
         HWDetector(){}
@@ -80,13 +83,17 @@ class SrcHandle{
                 while(cap.isOpened()){
                     cv::Mat frame; 
                     cap.read(frame); 
+
+                    //AI Inference and Overlay function 
+                    if (HWFlag){
+                        //use NVIDIA GPU
+                        
+                    }
+
                     
                     size_t size = frame.cols * frame.rows * frame.channels(); 
                     buffer = gst_buffer_new_allocate(NULL, size, NULL); 
-                    gst_buffer_map(buffer, &map, GST_MAP_WRITE); 
-
-                    //AI Inference and frame overlay function
-                    
+                    gst_buffer_map(buffer, &map, GST_MAP_WRITE);
                     memcpy(map.data, frame.data, size); 
 
 
