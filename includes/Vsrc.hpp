@@ -23,8 +23,7 @@ class HWDetector{
         //bool HWFlag = false;
 
     public:
-        HWDetector(){}
-
+    
         void Detector(){
 
             //get the context and ctx device 
@@ -53,7 +52,7 @@ class HWDetector{
                 HWFlag = false;
             }
         }
-}
+};
 
 class SrcHandle{
     private:
@@ -90,6 +89,8 @@ class SrcHandle{
                     //AI Inference and Overlay function 
                     if (HWFlag){
                         //use NVIDIA GPU
+                        InferenceEngine engine("/includes/models", "GPU"); 
+                        cv::Mat frame = engine.Vinference(); 
 
                     }
 
@@ -98,9 +99,7 @@ class SrcHandle{
                     buffer = gst_buffer_new_allocate(NULL, size, NULL); 
                     gst_buffer_map(buffer, &map, GST_MAP_WRITE);
                     memcpy(map.data, frame.data, size); 
-
-
                 }
             }  
         }
-}
+};

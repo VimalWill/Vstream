@@ -27,4 +27,4 @@ class InferenceEngine{
             }
             
         }
-}
+};
