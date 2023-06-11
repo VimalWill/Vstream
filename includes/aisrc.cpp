@@ -38,7 +38,7 @@ static void GstAISrc::NeedSource(GstAppSrc* appsrc, gpointer user_data){
     }
 }
 
-auto HardwareDetect() -> bool{
+bool GstAISrc::HardwareDetect() {
 
     //get the opencl platform and context 
     std::vector<cl::Platform> platforms; 
