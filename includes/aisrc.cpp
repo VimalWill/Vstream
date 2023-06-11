@@ -2,6 +2,7 @@
 #define CL_HPP_ENABLE_EXCEPTIONS
 
 #include <includes/aisrc.hpp>
+#include <includes/InferEng.hpp>
 #include <gst/gst.h>
 #include <gst/app/app.h>
 #include <gst/app/gstappsrc.h>
@@ -16,6 +17,7 @@ static void GstAISrc::NeedSource(GstAppSrc* appsrc, gpointer user_data){
     GstFlowReturn ret; 
 
     GstClockTime timestamp;
+    GstInferaEng engine;
 
     //opencv source capture 
     cv::VideoCapture cap;
@@ -26,10 +28,11 @@ static void GstAISrc::NeedSource(GstAppSrc* appsrc, gpointer user_data){
         cv::Mat frame;
         cap.read(frame); 
 
-        //initalize the Inference Engine here 
+        //AI inference engine
+        cv::Mat img = engine.InferenceEngine(frame); 
         
-
-        size_t bufsize = frame.cols * frame.rows * frame.channels(); 
+        //allocate the GStreamer Buffer 
+        size_t bufsize = img.cols * img.rows * img.channels();
         buffer = gst_buffer_new_allocate(NULL, bufsize, NULL); 
 
     }
