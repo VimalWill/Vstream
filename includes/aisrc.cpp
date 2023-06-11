@@ -52,8 +52,19 @@ auto HardwareDetect() -> bool{
         if(deviceName.find("NVIDIA") != std::string::npos){
             std::cout << "Required Hardware Detetcted" << std::endl;
             HW_FLG = true; 
-        } 
+        }else{
+            std::cout << "Warning: Required Hardware not found, offloading to CPU" << std::endl;
+            HW_FLG = false; 
+        }
     }
+
+    //exceptation handle
+    catch(cl::Error &err){
+        std::cout << err.what() << std::endl; 
+        HW_FLG = false; 
+    }
+
+    return HW_FLG; 
 
 }
 
