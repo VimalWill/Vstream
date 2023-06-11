@@ -27,6 +27,10 @@ static void GstAISrc::NeedSource(GstAppSrc* appsrc, gpointer user_data){
         cap.read(frame); 
 
         //initalize the Inference Engine here 
+        
+
+        size_t bufsize = frame.cols * frame.rows * frame.channels(); 
+        buffer = gst_buffer_new_allocate(NULL, bufsize, NULL); 
 
     }
 }
@@ -65,6 +69,5 @@ auto HardwareDetect() -> bool{
     }
 
     return HW_FLG; 
-
 }
 
