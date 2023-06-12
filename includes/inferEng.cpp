@@ -18,7 +18,7 @@ cv::Mat GstInferaEng::Preproc(cv::Mat &frame){
     cv::resize(image, resized_img, cv::Size(480, 640)); 
 
     //normalization
-
+    
 
 
 }

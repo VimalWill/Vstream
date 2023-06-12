@@ -28,8 +28,10 @@ static void GstAISrc::NeedSource(GstAppSrc* appsrc, gpointer user_data){
         cv::Mat frame;
         cap.read(frame); 
 
+        //image preprocessing 
+        cv::Mat procImg = engine.Preproc(frame);
         //AI inference engine
-        cv::Mat img = engine.InferenceEngine(frame); 
+        cv::Mat img = engine.InferenceEngine(procImg); 
         
         //allocate the GStreamer Buffer 
         size_t bufsize = img.cols * img.rows * img.channels();
