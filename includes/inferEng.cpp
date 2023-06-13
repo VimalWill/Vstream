@@ -1,24 +1,20 @@
-#include <opencv2/opencv.hpp>
 #include <includes/InferEng.hpp>
-#include <onnxruntime/core/session/onnxruntime_cxx_api.h>
-#include <onnxruntime/core/providers/cpu/cpu_provider_factory.h>
+#include <opencv2/opencv.hpp>
+#include <bits/stdc++.h>
 
-cv::Mat GstInferaEng::InferenceEngine(cv::Mat &input_image){
+cv::Mat GstInferaEng::Preproc(cv::Mat& image, const int InputWidth, const int InputHeight){
 
-    cv::Mat frame = input_image; 
-    
-}
+    //Image preprocessing for YOLOv8 
+    cv::Mat frame, frame_resize, processed_frame; 
+    frame = image; 
 
-cv::Mat GstInferaEng::Preproc(cv::Mat &frame){
-    cv::Mat image = frame; 
+    cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB); 
+    cv::resize(frame, frame_resize, cv::Size(InputHeight, InputHeight)); 
 
-    //color conversion and resize
-    cv::Mat resized_img, processed_img;
-    cv::cvtColor(image, image, cv::COLOR_BGR2RGB); 
-    cv::resize(image, resized_img, cv::Size(480, 640)); 
+    cv::Mat image_data; 
+    frame_resize.convertTo(image_data, CV_32FC3, 1.0/255.0); 
+    cv::transpose(image_data, image_data); 
 
-    //normalization
-    
-
-
+    processed_frame = image_data.reshape(1, cv::Size(InputWidth, InputHeight)); 
+    return processed_frame; 
 }
