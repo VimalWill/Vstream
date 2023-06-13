@@ -6,10 +6,15 @@
 #include <bits/stdc++.h>
 
 class GstInferaEng{
+    private:
+        const int InputWidth = 480; 
+        const int InputHeight = 640;
+
     public:
+        GstInferaEng()
         auto InferenceEngine(cv::Mat) -> cv::Mat; 
         auto Preproc(cv::Mat, const int, const int) -> cv::Mat; 
-        auto Postproc()
+        auto Postproc(cv::Mat& outputImage) -> cv::Mat;
 
 };
 
