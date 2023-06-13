@@ -8,7 +8,8 @@
 class GstInferaEng{
     public:
         auto InferenceEngine(cv::Mat) -> cv::Mat; 
-        auto Preproc(cv::Mat) -> cv::Mat; 
+        auto Preproc(cv::Mat, const int, const int) -> cv::Mat; 
+        auto Postproc()
 
 };
 

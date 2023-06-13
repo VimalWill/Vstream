@@ -23,15 +23,17 @@ static void GstAISrc::NeedSource(GstAppSrc* appsrc, gpointer user_data){
     cv::VideoCapture cap;
     cap.open(user_data);
 
+    const int IMGwidth = 640; 
+    const int IMGHeight = 480;
+
     while(cap.isOpened()){
         //get the mat frames and push to Inference Engine 
         cv::Mat frame;
         cap.read(frame); 
 
-        //image preprocessing 
-        cv::Mat procImg = engine.Preproc(frame);
-        //AI inference engine
-        cv::Mat img = engine.InferenceEngine(procImg); 
+        //AI Inference Engine
+        cv::Mat preprocImg = engine.Preproc(frame, IMGwidth, IMGHeight);
+        cv::Mat img = engine.InferenceEngine(preprocImg); 
         
         //allocate the GStreamer Buffer 
         size_t bufsize = img.cols * img.rows * img.channels();
