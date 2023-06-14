@@ -32,8 +32,6 @@ cv::Mat GstInferaEng::InferenceEngine(){
    InputWidth = input_shape[2]; 
    InputHeight = input_shape[3];
 
-   //cv::Mat preproc_img = Preproc(Input_img);
-
    //allocate the input size and tensor 
    size_t tensorSize = input_shape[1] * input_shape[2] * input_shape[3]; 
    Ort::Value::CreateTensor<float>()
@@ -53,7 +51,9 @@ cv::Mat GstInferaEng::Preproc(cv::Mat& image){
     frame_resize.convertTo(image_data, CV_32FC3, 1.0/255.0); 
     cv::transpose(image_data, image_data); 
 
-    processed_frame = image_data.reshape(1, InputWidth * InputHeight); 
+    //https://stackoverflow.com/questions/64084646/expand-dimensions-for-opencv-mat-object-in-c
+    int buf[4] = {1, image_data.channels(), image_data.rows, image_data.cols}; 
+    processed_frame(4, buf, image_data.type(), image_data.data); 
     return processed_frame; 
 }
 
