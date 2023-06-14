@@ -7,13 +7,17 @@
 
 class GstInferaEng{
     private:
-        const int InputWidth = 480; 
-        const int InputHeight = 640;
+        int InputWidth; 
+        int InputHeight;
+
+        cv::Mat Input_img;
 
     public:
-        GstInferaEng()
-        auto InferenceEngine(cv::Mat) -> cv::Mat; 
-        auto Preproc(cv::Mat, const int, const int) -> cv::Mat; 
+        GstInferaEng(cv::Mat& image);
+
+
+        auto InferenceEngine() -> cv::Mat; 
+        auto Preproc(cv::Mat) -> std::vector<float>;
         auto Postproc(cv::Mat& outputImage) -> cv::Mat;
 
 };

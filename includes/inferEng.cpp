@@ -32,13 +32,18 @@ cv::Mat GstInferaEng::InferenceEngine(){
    InputWidth = input_shape[2]; 
    InputHeight = input_shape[3];
 
-   //allocate the input size and tensor 
    size_t tensorSize = input_shape[1] * input_shape[2] * input_shape[3]; 
-   Ort::Value::CreateTensor<float>()
+
+   //get the preprocessed vector 
+   std::vector<float> preprocessed_img = Preproc(Input_img); 
+   
+   auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault); 
+   Ort::Value input_tensor = Ort::Value::CreateTensor<float>(memory_info, preprocessed_img.data(), tensorSize, input_shape.data(), 4);
+   assert(input_tensor.IsTensor()); 
 
 }
 
-cv::Mat GstInferaEng::Preproc(cv::Mat& image){
+std::vector<float> GstInferaEng::Preproc(cv::Mat& image){
 
     //Image preprocessing for YOLOv8 
     cv::Mat frame, frame_resize, processed_frame; 
@@ -54,7 +59,16 @@ cv::Mat GstInferaEng::Preproc(cv::Mat& image){
     //https://stackoverflow.com/questions/64084646/expand-dimensions-for-opencv-mat-object-in-c
     int buf[4] = {1, image_data.channels(), image_data.rows, image_data.cols}; 
     processed_frame(4, buf, image_data.type(), image_data.data); 
-    return processed_frame; 
+
+    //cv::Mat to vector<float>
+    std::vector<float> processed_vector; 
+    processed_vector.reserve(processed_frame.total()); 
+
+    for(int i=0; i<processed_frame.total(); i++){
+        processed_vector.push_back(static_cast<float>(processed_vector.data[i])); 
+    }
+    
+    return processed_vector; 
 }
 
 cv::Mat GstInferaEng::Postproc(cv::Mat& outputImage){
