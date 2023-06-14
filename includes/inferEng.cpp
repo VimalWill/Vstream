@@ -53,20 +53,15 @@ std::vector<float> GstInferaEng::Preproc(cv::Mat& image){
     cv::resize(frame, frame_resize, cv::Size(InputWidth, InputHeight)); 
 
     cv::Mat image_data; 
-    frame_resize.convertTo(image_data, CV_32FC3, 1.0/255.0); 
+    frame_resize.convertTo(image_data, CV_32F, 1.0/255.0); 
     cv::transpose(image_data, image_data); 
 
     //https://stackoverflow.com/questions/64084646/expand-dimensions-for-opencv-mat-object-in-c
-    int buf[4] = {1, image_data.channels(), image_data.rows, image_data.cols}; 
-    processed_frame(4, buf, image_data.type(), image_data.data); 
+    //int buf[4] = {1, image_data.channels(), image_data.rows, image_data.cols}; 
+    //processed_frame(4, buf, image_data.type(), image_data.data); 
 
-    //cv::Mat to vector<float>
-    std::vector<float> processed_vector; 
-    processed_vector.reserve(processed_frame.total()); 
-
-    for(int i=0; i<processed_frame.total(); i++){
-        processed_vector.push_back(static_cast<float>(processed_vector.data[i])); 
-    }
+    //converting cv::Mat to vector
+    std::vector<float> processed_vector(image_data.ptr<float>(), image_data.ptr<float>() + (image_data.rows * image_data.cols * image_data.channels())); 
     
     return processed_vector; 
 }
