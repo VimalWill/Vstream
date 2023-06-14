@@ -45,24 +45,23 @@ cv::Mat GstInferaEng::InferenceEngine(){
 
 std::vector<float> GstInferaEng::Preproc(cv::Mat& image){
 
-    //Image preprocessing for YOLOv8 
-    cv::Mat frame, frame_resize, processed_frame; 
-    frame = image; 
+    //color-conversion and resize 
+    cv::Mat resized_frame; 
+    cv::cvtColor(image, image, cv::COLOR_BGR2RGB); 
+    cv::resize(image, resized_frame, cv::Size(InputWidth, InputHeight)); 
 
-    cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB); 
-    cv::resize(frame, frame_resize, cv::Size(InputWidth, InputHeight)); 
+    //transpose 
+    cv::transpose(resized_frame, resized_frame); 
 
+    //normalize 
     cv::Mat image_data; 
-    frame_resize.convertTo(image_data, CV_32F, 1.0/255.0); 
-    cv::transpose(image_data, image_data); 
-
+    resized_frame.convertTo(image_data, CV_32F, 1.0/255.0);
     //https://stackoverflow.com/questions/64084646/expand-dimensions-for-opencv-mat-object-in-c
     //int buf[4] = {1, image_data.channels(), image_data.rows, image_data.cols}; 
     //processed_frame(4, buf, image_data.type(), image_data.data); 
 
     //converting cv::Mat to vector
     std::vector<float> processed_vector(image_data.ptr<float>(), image_data.ptr<float>() + (image_data.rows * image_data.cols * image_data.channels())); 
-    
     return processed_vector; 
 }
 
