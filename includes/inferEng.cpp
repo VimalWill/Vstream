@@ -19,20 +19,24 @@ cv::Mat GstInferaEng::InferenceEngine(){
    Ort::Env env(ORT_LOGGING_LEVEL_WARNING, instanceName.c_str()); 
    Ort::SessionOptions sessionOptions; 
    sessionOptions.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
-   Ort::Session session(env,modelPath.c_str(), sessionOptions); 
 
+   Ort::Session session(env,modelPath.c_str(), sessionOptions); 
    Ort::AllocatorWithDefaultOptions allocator; 
-   std::vector<const char*> InputNames = session.GetInputNameAllocated(0, allocator);
+
+   auto input_layer = session.GetInputNameAllocated(0, allocator); 
+   std::string in_layer_name = input_layer.get(); 
+
    Ort::TypeInfo input_type_info = session.GetInputTypeInfo(0); 
    auto input_shape = input_type_info.GetTensorTypeAndShapeInfo().GetShape(); 
 
    InputWidth = input_shape[2]; 
    InputHeight = input_shape[3];
 
-   cv::Mat preproc_img = Preproc(Input_img);
+   //cv::Mat preproc_img = Preproc(Input_img);
 
-
-
+   //allocate the input size and tensor 
+   size_t tensorSize = input_shape[1] * input_shape[2] * input_shape[3]; 
+   Ort::Value::CreateTensor<float>()
 
 }
 
