@@ -24,7 +24,9 @@ cv::Mat GstInferaEng::InferenceEngine(){
    Ort::AllocatorWithDefaultOptions allocator; 
 
    auto input_layer = session.GetInputNameAllocated(0, allocator); 
-   std::string in_layer_name = input_layer.get(); 
+   char* in_layer_name = input_layer.get(); 
+   auto output_layer = session.GetOutputNameAllocated(0, allocator); 
+   char* out_layer_name = output_layer.get();
 
    Ort::TypeInfo input_type_info = session.GetInputTypeInfo(0); 
    auto input_shape = input_type_info.GetTensorTypeAndShapeInfo().GetShape(); 
@@ -40,6 +42,15 @@ cv::Mat GstInferaEng::InferenceEngine(){
    auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault); 
    Ort::Value input_tensor = Ort::Value::CreateTensor<float>(memory_info, preprocessed_img.data(), tensorSize, input_shape.data(), 4);
    assert(input_tensor.IsTensor()); 
+
+   //get inference 
+   try{
+    auto outputs = session.Run{Ort::RunOptions{nullptr}, &in_layer_name, &input_tensor, 1, &out_layer_name, 1}; 
+    assert(outputs.front().isTensor());
+   }
+   catch(Ort::Exception &e){
+    std::cout << e.what() << std::endl;
+   }
 
 }
 
