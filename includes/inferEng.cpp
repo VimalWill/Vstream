@@ -44,14 +44,38 @@ cv::Mat GstInferaEng::InferenceEngine(){
    assert(input_tensor.IsTensor()); 
 
    //get inference 
-   try{
-    auto outputs = session.Run{Ort::RunOptions{nullptr}, &in_layer_name, &input_tensor, 1, &out_layer_name, 1}; 
-    assert(outputs.front().isTensor());
-   }
-   catch(Ort::Exception &e){
-    std::cout << e.what() << std::endl;
-   }
+   auto output_layer = session.GetOutputNameAllocated(0, allocator); 
+   char* out_layer_name = output_layer.get(); 
+   std::cout << out_layer_name << std::endl; 
 
+   std::vector<Ort::Value> outputs = session.Run(Ort::RunOptions{nullptr}, &in_layer_name, &input_tensor, 1, &out_layer_name, 1); 
+   assert(outputs.front().IsTensor());
+   float* floatarr = outputs.front().GetTensorMutableData<float>();
+   auto output_shape = outputs.front().GetTensorTypeAndShapeInfo().GetShape(); 
+
+   float* tensorData = floatarr; 
+   std::vector<float> outputData; 
+
+   const int64_t batchSize = output_shape[0];
+   const int64_t width = output_shape[1]; 
+   const int64_t height = output_shape[2]; 
+
+   outputData.resize(batchSize * width * height);
+   for (int b = 0; b < batchSize; b++){
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // Calculate the index of the current element
+                int index = b * width * height + y * width + x;
+
+                // Access the data at the current index
+                float value = tensorData[index];
+                outputData[index] = value;
+            }
+        }
+    }
+
+    //push to post-processing 
+     
 }
 
 std::vector<float> GstInferaEng::Preproc(cv::Mat& image){
