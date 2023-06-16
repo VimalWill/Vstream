@@ -81,9 +81,10 @@ cv::Mat GstInferaEng::InferenceEngine(){
 std::vector<float> GstInferaEng::Preproc(cv::Mat& image){
 
     //color-conversion and resize 
+    cv::Mat frame = image; 
     cv::Mat resized_frame; 
-    cv::cvtColor(image, image, cv::COLOR_BGR2RGB); 
-    cv::resize(image, resized_frame, cv::Size(InputWidth, InputHeight)); 
+    cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB); 
+    cv::resize(frame, resized_frame, cv::Size(InputWidth, InputHeight)); 
 
     //transpose 
     cv::transpose(resized_frame, resized_frame); 
@@ -100,18 +101,28 @@ std::vector<float> GstInferaEng::Preproc(cv::Mat& image){
     return processed_vector; 
 }
 
-cv::Mat GstInferaEng::Postproc(cv::Mat& outputImage){
+cv::Mat GstInferaEng::Postproc(std::vector<float>& outputData, cv::Size& org_shape){
 
-    //Image Post-processing includes Non-maximal supression and overlay function
-    cv::Mat frame = outputImage; 
-    frame = frame.reshape(0, {0});
-    cv::transpose(frame, frame); 
-
-    //get the no. of rows
-    int rows = frame.rows; 
-    
     //calculate the scaling factor 
+    int64_t x_factor = 640 / org_shape.width; 
+    int64_t y_factor = 640 / org_shape.height; 
 
+    //convert to mat
+    cv::Mat output2D = cv::Mat(outputData).reshape(0, 84); 
+    output2D.reshape(0, 8400); 
 
+    //get the maximum score and get the score and index
+    std::vector<cv::Rect> boxes; 
+    std::vector<float> scores; 
+    std::vector<int64_t> class_ids; 
+
+    for(int row=0; row<output2D.rows; ++row){
+        for(int col=4; col<output2D.cols; ++col){
+
+            //calculate the max-score in each layer 
+            
+        }
+    }
+    
 
 }
