@@ -98,12 +98,43 @@ std::vector<float> GstInferaEng::Preproc(cv::Mat& image){
 
 cv::Mat GstInferaEng::Postproc(std::vector<std::vector<float>>& output, cv::Size& org_shape){
 
-    //calculate the scaling factor 
-    int64_t x_factor = 640 / org_shape.width; 
-    int64_t y_factor = 640 / org_shape.height; 
+    //calculate the scaling factor
+    int org_width = org_shape.width;
+    int org_height = org_shape.height;
+
+    int64_t x_factor = 640.0 / org_width; 
+    int64_t y_factor = 640.0 / org_height; 
+
+    int left, right, height, width; 
+
+    float conf = 0.5; 
+    float iou = 0.5; 
 
     for(auto& row : output){
-        
+        float maxValue = row[4]; 
+        int maxIndex = 4; 
+
+        for(int i=5; i<row.size(); ++i){
+            if(row[i] > maxValue){
+                maxValue = row[i]; 
+                maxIndex = i; 
+            }
+
+            if(maxValue >= conf){
+                
+                //get the bounding box data
+                float x = row[0]; 
+                float y = row[1]; 
+                float w = row[2]; 
+                float h = row[3]; 
+
+                //calculate the scaled bounding box 
+                left = int((x - w/2)*x_factor); 
+                right = int((y - h/2)*y_factor); 
+                width = int(w*x_factor);
+                height = int(h*y_factor);
+            }
+        }
     }
     
 
