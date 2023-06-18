@@ -119,23 +119,22 @@ cv::Mat GstInferaEng::Postproc(std::vector<std::vector<float>>& output, cv::Size
                 maxValue = row[i]; 
                 maxIndex = i; 
             }
-
-            if(maxValue >= conf){
-                
-                //get the bounding box data
-                float x = row[0]; 
-                float y = row[1]; 
-                float w = row[2]; 
-                float h = row[3]; 
-
-                //calculate the scaled bounding box 
-                left = int((x - w/2)*x_factor); 
-                right = int((y - h/2)*y_factor); 
-                width = int(w*x_factor);
-                height = int(h*y_factor);
-            }
         }
-    }
-    
+
+        if(maxValue >= conf){
+                
+            //get the bounding box data
+            float x = row[0]; 
+            float y = row[1]; 
+            float w = row[2]; 
+            float h = row[3]; 
+
+            //calculate the scaled bounding box 
+            left = int((x - w/2)*x_factor); 
+            right = int((y - h/2)*y_factor); 
+            width = int(w*x_factor);
+            height = int(h*y_factor);
+        }
+    } 
 
 }
