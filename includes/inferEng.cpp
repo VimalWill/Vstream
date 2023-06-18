@@ -50,31 +50,26 @@ cv::Mat GstInferaEng::InferenceEngine(){
 
    std::vector<Ort::Value> outputs = session.Run(Ort::RunOptions{nullptr}, &in_layer_name, &input_tensor, 1, &out_layer_name, 1); 
    assert(outputs.front().IsTensor());
-   float* floatarr = outputs.front().GetTensorMutableData<float>();
+   float* tensorData = outputs.front().GetTensorMutableData<float>();
    auto output_shape = outputs.front().GetTensorTypeAndShapeInfo().GetShape(); 
 
-   float* tensorData = floatarr; 
-   std::vector<float> outputData; 
 
    const int64_t batchSize = output_shape[0];
-   const int64_t width = output_shape[1]; 
-   const int64_t height = output_shape[2]; 
+   const int64_t cols = output_shape[1]; 
+   const int64_t rows = output_shape[2]; 
 
-   outputData.resize(batchSize * width * height);
-   for (int b = 0; b < batchSize; b++){
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                // Calculate the index of the current element
-                int index = b * width * height + y * width + x;
-
-                // Access the data at the current index
-                float value = tensorData[index];
-                outputData[index] = value;
-            }
-        }
+   //converting into 2D matrix 
+   std::vector<std::vector<float>> outputData(rows, std::vector<float>(cols)); 
+   for(int=0; i<rows; ++i){
+    for(int j=0; j<cols; ++j){
+        int index = i * cols + j; 
+        outputData[i][j] = tensorData[index];
     }
+   }
 
-    //push to post-processing 
+   //push to post processing 
+   cv::Size frameSize = Input_img.size();
+   Postproc(outputData, frameSize); 
      
 }
 
@@ -101,27 +96,14 @@ std::vector<float> GstInferaEng::Preproc(cv::Mat& image){
     return processed_vector; 
 }
 
-cv::Mat GstInferaEng::Postproc(std::vector<float>& outputData, cv::Size& org_shape){
+cv::Mat GstInferaEng::Postproc(std::vector<std::vector<float>>& output, cv::Size& org_shape){
 
     //calculate the scaling factor 
     int64_t x_factor = 640 / org_shape.width; 
     int64_t y_factor = 640 / org_shape.height; 
 
-    //convert to mat
-    cv::Mat output2D = cv::Mat(outputData).reshape(0, 84); 
-    output2D.reshape(0, 8400); 
-
-    //get the maximum score and get the score and index
-    std::vector<cv::Rect> boxes; 
-    std::vector<float> scores; 
-    std::vector<int64_t> class_ids; 
-
-    for(int row=0; row<output2D.rows; ++row){
-        for(int col=4; col<output2D.cols; ++col){
-
-            //calculate the max-score in each layer 
-            
-        }
+    for(auto& row : output){
+        
     }
     
 
