@@ -58,18 +58,15 @@ cv::Mat GstInferaEng::InferenceEngine(){
    const int64_t cols = output_shape[1]; 
    const int64_t rows = output_shape[2]; 
 
-   //converting into 2D matrix 
-   std::vector<std::vector<float>> outputData(rows, std::vector<float>(cols)); 
-   for(int=0; i<rows; ++i){
-    for(int j=0; j<cols; ++j){
-        int index = i * cols + j; 
-        outputData[i][j] = tensorData[index];
-    }
-   }
+   //array to vector 
+   int numEle = cols * rows; 
+   std::vector<float> tensorVector(tensorData, tensorData + numEle); 
+   std::vector<std::vector<float>> outputData; 
+   outputData.resize(84, tensorVector); 
 
-   //push to post processing 
-   cv::Size frameSize = Input_img.size();
-   Postproc(outputData, frameSize); 
+   
+
+   //push the vector to postprocessor
      
 }
 
