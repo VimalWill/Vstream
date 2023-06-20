@@ -58,16 +58,6 @@ cv::Mat GstInferaEng::InferenceEngine(){
    const int64_t cols = output_shape[1]; 
    const int64_t rows = output_shape[2]; 
 
-   //array to vector 
-   int numEle = cols * rows; 
-   std::vector<float> tensorVector(tensorData, tensorData + numEle); 
-   std::vector<std::vector<float>> outputData; 
-   outputData.resize(84, tensorVector); 
-
-   
-
-   //push the vector to postprocessor
-     
 }
 
 std::vector<float> GstInferaEng::Preproc(cv::Mat& image){
