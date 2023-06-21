@@ -19,6 +19,7 @@ class GstInferaEng{
         auto InferenceEngine() -> cv::Mat; 
         auto Preproc(cv::Mat) -> std::vector<float>;
         auto Postproc(cv::Mat& outputImage) -> cv::Mat;
+        void letterBox(cv::Mat& Input_image, cv::Mat& OutputImage);
 
 };
 

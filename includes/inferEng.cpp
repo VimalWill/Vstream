@@ -9,6 +9,33 @@
 GstInferaEng::GstInferaEng(cv::Mat& Image){
     Input_img = Image;
 }
+void GstInferaEng::letterBox(cv::Mat& Input_img, cv::Mat& Output_img){
+    float target_width = 640.0; 
+    float target_heigth = 640.0; 
+
+    float org_width = Input_img.size().width; 
+    float org_height = Input_img.size().height; 
+
+    //computing scaling factor 
+    float ratio_w = target_width / org_width; 
+    float ratio_h = target_heigth / org_height; 
+
+    float scaling_factor = std::min(ratio_w, ratio_h); 
+    int new_width = org_width * scaling_factor; 
+    int new_height = org_height * scaling_factor; 
+
+    //image resize
+    cv::Mat resized_frame; 
+    cv::resize(Input_img, resized_frame, cv::Size(new_width, new_height)); 
+
+    int top_padding = (target_heigth - new_height)/2; 
+    int bottom_padding = target_heigth - new_height - top_padding; 
+    int left_padding = (target_width - new_width)/2; 
+    int right_padding = target_width - target_heigth - left_padding; 
+
+    cv::copyMakeBorder(resized_frame, Output_img, top_padding, bottom_padding, left_padding, right_padding, cv::BORDER_CONSTANT, cv::Scalar(0)); 
+
+}
 
 cv::Mat GstInferaEng::InferenceEngine(){
 
