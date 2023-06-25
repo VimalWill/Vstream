@@ -61,3 +61,57 @@ void GstAppSrcInfer::GetOutputDetails(Ort::AllocatorWithDefaultOptions allocator
         std::cout << std::endl; 
     }
 }
+
+//Image preprocessing for model fit 
+void GstAppSrcInfer::Preprocessor(cv::Mat& frame, float*& blob, std::vector<int64_t>& InputTensorShape){
+
+    //color conversion 
+    cv::cvtColor(frame, frame, cv::COLOR_BGR2RGB); 
+
+    //resize with padding 
+    cv::Mat resized_img; 
+    letterBox(frame, resized_img);
+
+    InputTensorShape[2] = resized_img.size().height; 
+    InputTensorShape[3] = resized_img.size().width; 
+
+    //normalization 
+    cv::Mat& float_img; 
+    resized_img.convertTo(float_img, CV_32FC3, 1/255.0);
+    blob = new float(float_img.cols * float_img.rows * float_img.channels()); 
+    cv::Size floatImageSize(float_img.cols, float_img.rows);
+
+    //hwc -> chw 
+    std::vector<cv::Mat> chw(float_img.channels());
+    for(int i = 0; i < float_img.channels(); ++i){
+        chw[i] = cv::Mat(floatImageSize, CV_32FC1, blob + i * floatImageSize.width * floatImageSize.height);
+    }
+    cv::split(float_img, chw);
+}
+
+//resize with padding
+cv::Mat GstAppSrcInfer::letterBox(cv::Mat& InputImage, cv::Mat& OutputImage){
+
+    float org_width, org_height, target_width = 640.0, target_height = 640.0, ratio_w, ratio_h; 
+    org_width = InputImage.size().width; 
+    org_height = InputImage.size().height; 
+
+    ratio_w = target_width / org_width; 
+    ratio_h = target_height / org_height; 
+
+    //scaling factor 
+    float scaling_factor = std::min(ratio_w, ratio_h); 
+    int new_width = org_width * scaling_factor; 
+    int new_height = org_height * scaling_factor; 
+
+    cv::Mat resized_img; 
+    cv::resize(InputImage, resized_img, cv::Size(new_width, new_height)); 
+
+    //paddings 
+    int top_padding = (target_height - new_height)/2; 
+    int bottom_padding = target_height - new_height - top_padding; 
+    int left_padding = (target_width - new_width)/2; 
+    int right_padding = target_width - new_width - left_padding; 
+
+    cv::copyMakeBorder(resized_img, OutputImage, top_padding, bottom_padding, left_padding, right_padding);
+}
