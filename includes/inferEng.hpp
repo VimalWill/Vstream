@@ -31,8 +31,8 @@ class GstAppSrcInfer{
         void InferenceEngine(cv::Mat& frame); 
         void GetInputDetails(Ort::AllocatorWithDefaultOptions allocator); 
         void GetOutputDetails(Ort::AllocatorWithDefaultOptions allocator); 
-        void Preprocessor(cv::Mat& frame, float*& blob, std::vector<int64_t> InputTensorShape);
-        cv::Mat letterBox(cv::Mat& InputImage, cv::Mat& OuputImage);
+        void Preprocessor(cv::Mat& frame, float*& blob, std::vector<int64_t>& InputTensorShape);
+        void letterBox(cv::Mat& InputImage, cv::Mat& OuputImage);
 };
 
 #endif /*INFERENG_HPP*/

@@ -17,7 +17,7 @@ GstAppSrcInfer::GstAppSrcInfer(){
 
 void GstAppSrcInfer::GetInputDetails(Ort::AllocatorWithDefaultOptions allocator){
     
-    std::cout << "------- Input Info -------" << std::endl; 
+    std::cout << "---------- Input Info -------" << std::endl; 
     for(int i=0; i<session.GetInputCount(); i++){
 
         //get input node name
@@ -41,7 +41,7 @@ void GstAppSrcInfer::GetInputDetails(Ort::AllocatorWithDefaultOptions allocator)
 
 void GstAppSrcInfer::GetOutputDetails(Ort::AllocatorWithDefaultOptions allocator){
 
-    std::cout << "------- Output Info -------" << std::endl; 
+    std::cout << "--------- Output Info -------" << std::endl; 
     for(int i=0; i<session.GetOutputCount(); i++){
 
         //get output node name
@@ -76,9 +76,9 @@ void GstAppSrcInfer::Preprocessor(cv::Mat& frame, float*& blob, std::vector<int6
     InputTensorShape[3] = resized_img.size().width; 
 
     //normalization 
-    cv::Mat& float_img; 
+    cv::Mat float_img; 
     resized_img.convertTo(float_img, CV_32FC3, 1/255.0);
-    blob = new float(float_img.cols * float_img.rows * float_img.channels()); 
+    blob = new float[float_img.cols * float_img.rows * float_img.channels()]; 
     cv::Size floatImageSize(float_img.cols, float_img.rows);
 
     //hwc -> chw 
@@ -90,7 +90,7 @@ void GstAppSrcInfer::Preprocessor(cv::Mat& frame, float*& blob, std::vector<int6
 }
 
 //resize with padding
-cv::Mat GstAppSrcInfer::letterBox(cv::Mat& InputImage, cv::Mat& OutputImage){
+void GstAppSrcInfer::letterBox(cv::Mat& InputImage, cv::Mat& OutputImage){
 
     float org_width, org_height, target_width = 640.0, target_height = 640.0, ratio_w, ratio_h; 
     org_width = InputImage.size().width; 
@@ -113,5 +113,19 @@ cv::Mat GstAppSrcInfer::letterBox(cv::Mat& InputImage, cv::Mat& OutputImage){
     int left_padding = (target_width - new_width)/2; 
     int right_padding = target_width - new_width - left_padding; 
 
-    cv::copyMakeBorder(resized_img, OutputImage, top_padding, bottom_padding, left_padding, right_padding);
+    cv::copyMakeBorder(resized_img, OutputImage, top_padding, bottom_padding, left_padding, right_padding, cv::BORDER_CONSTANT, cv::Scalar(0));
+}
+
+void GstAppSrcInfer::InferenceEngine(cv::Mat& frame){
+
+    //processing
+    std::vector<int64_t> InputTensorShape = {1, 3, -1, -1}; 
+    float* blob; 
+
+    Preprocessor(frame, blob, InputTensorShape); 
+    size_t InputTensorSize = 1; 
+    for(auto elem : InputTensorShape){
+        InputTensorSize *= elem; 
+    }
+    std::cout << "Input Tensor Size:" << InputTensorSize << std::endl; 
 }
