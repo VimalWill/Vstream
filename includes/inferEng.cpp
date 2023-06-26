@@ -3,13 +3,14 @@
 
 GstAppSrcInfer::GstAppSrcInfer(){
 
-    //initalize the ONNX-Runtime
-   Ort::Env env(ORT_LOGGING_LEVEL_WARNING, instance.c_str()); 
+   //initalize the ONNX-Runtime  
+   //https://github.com/microsoft/onnxruntime/issues/4245
+   env = Ort::Env(ORT_LOGGING_LEVEL_WARNING, instance.c_str()); 
    sessionOptions = Ort::SessionOptions();
-   sessionOptions.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED); 
 
    session = Ort::Session(env, modelPath.c_str(), sessionOptions);
    Ort::AllocatorWithDefaultOptions allocator; 
+
 
    GetInputDetails(allocator); 
    GetOutputDetails(allocator);
@@ -22,9 +23,9 @@ void GstAppSrcInfer::GetInputDetails(Ort::AllocatorWithDefaultOptions allocator)
 
         //get input node name
         auto input_name_ptr = session.GetInputNameAllocated(i, allocator); 
-        std::string input_name = input_name_ptr.get(); 
-        InputNames.push_back(input_name); 
-        std::cout << "Input Name:" << input_name << std::endl; 
+        inputNamesString.push_back(input_name_ptr.get()); 
+        InputNames.push_back(inputNamesString[i].c_str());
+        std::cout << "Input Name:" << InputNames[i] << std::endl; 
 
         //get input tensor shape 
         std::vector<int64_t> inputTensorShape = session.GetInputTypeInfo(i).GetTensorTypeAndShapeInfo().GetShape();
@@ -46,9 +47,9 @@ void GstAppSrcInfer::GetOutputDetails(Ort::AllocatorWithDefaultOptions allocator
 
         //get output node name
         auto output_name_ptr = session.GetOutputNameAllocated(i, allocator); 
-        std::string output_name = output_name_ptr.get(); 
-        OuputNames.push_back(output_name); 
-        std::cout << "Output Name:" << output_name << std::endl;
+        outputNamesString.push_back(output_name_ptr.get()); 
+        OutputNames.push_back(outputNamesString[i].c_str());
+        std::cout << "Output Name:" << OutputNames[i] << std::endl;
 
         //get output tensor shape
         std::vector<int64_t> outputTensorShape = session.GetOutputTypeInfo(i).GetTensorTypeAndShapeInfo().GetShape();
@@ -120,7 +121,7 @@ void GstAppSrcInfer::InferenceEngine(cv::Mat& frame){
 
     //processing
     std::vector<int64_t> InputTensorShape = {1, 3, -1, -1}; 
-    float* blob; 
+    float* blob = nullptr;
 
     Preprocessor(frame, blob, InputTensorShape); 
     size_t InputTensorSize = 1; 
@@ -128,4 +129,17 @@ void GstAppSrcInfer::InferenceEngine(cv::Mat& frame){
         InputTensorSize *= elem; 
     }
     std::cout << "Input Tensor Size:" << InputTensorSize << std::endl; 
+
+    std::vector<float> InputTensorValues(blob, blob + InputTensorSize); 
+    std::vector<Ort::Value> InputTensor; 
+
+    auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault); 
+
+    InputTensor.push_back(Ort::Value::CreateTensor<float>(
+        memory_info, InputTensorValues.data(), InputTensorSize, 
+        InputTensorShape.data(), InputTensorShape.size())); 
+    assert(InputTensor[0].IsTensor());
+
+    auto output = session.Run(Ort::RunOptions{nullptr}, InputNames.data(), InputTensor.data(), InputNames.size(), OutputNames.data(), OutputNames.size());
+    delete[] blob;
 }

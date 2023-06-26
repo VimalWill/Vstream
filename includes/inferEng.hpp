@@ -22,8 +22,10 @@ class GstAppSrcInfer{
         std::vector<std::vector<int64_t>> input_node_dims;
         std::vector<std::vector<int64_t>> output_node_dims;
 
-        std::vector<std::string> InputNames; 
-        std::vector<std::string> OuputNames;
+        std::vector<std::string> inputNamesString; 
+        std::vector<std::string> outputNamesString; 
+        std::vector<const char*> InputNames; 
+        std::vector<const char*> OutputNames;
     
     public:
         GstAppSrcInfer(); 
