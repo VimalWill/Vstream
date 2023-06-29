@@ -1,6 +1,12 @@
 //inference engine for Gstreamer Appsrc 
 #include "inferEng.hpp"
 
+struct Detection{
+    cv::Rect box; 
+    float confs{}; 
+    int classId();
+};
+
 GstAppSrcInfer::GstAppSrcInfer(){
 
    //initalize the ONNX-Runtime  
