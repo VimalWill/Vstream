@@ -35,6 +35,8 @@ class GstAppSrcInfer{
         void GetOutputDetails(Ort::AllocatorWithDefaultOptions allocator); 
         void Preprocessor(cv::Mat& frame, float*& blob, std::vector<int64_t>& InputTensorShape);
         void letterBox(cv::Mat& InputImage, cv::Mat& OuputImage);
+        void Postprocessor(std::vector<Ort::Value>& OuputTensor, int Org_width, int Org_height);
+        void GetBestClass(std::vector<float>::iterator& it, const int& numClasses, float& bestConf, int& bestClassId);
 };
 
 #endif /*INFERENG_HPP*/
