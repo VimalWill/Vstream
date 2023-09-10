@@ -4,6 +4,10 @@
 /*func@ load NN model & enable Hardware backend support*/
 bool Infera::infera_load_model(){
 
+    std::ifstream config("config.json"); 
+    nlohmann::json data = nlohmann::json::parse(config);
+    std::string model_path = data["model_path"];
+
     net = cv::dnn::readNetFromONNX(model_path);
 
     if(!net.empty()){
@@ -28,4 +32,17 @@ bool Infera::infera_load_model(){
     }
 
     return is_loaded; 
+}
+
+/*func@ performs image preprocessing, detection & post processing*/
+void Infera::neural_engine(cv::Mat& img){
+
+    cv::Mat TEMP; 
+    if(img.channels > 3)
+        perror("[-]experted channel should be 3"); 
+    
+    cv::cvtColor(img, TEMP, cv::COLOR_BGR2RGB); 
+    
+
+
 }
