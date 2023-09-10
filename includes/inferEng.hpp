@@ -1,42 +1,38 @@
-#pragma once
-#ifndef INFERENG_HPP
+/**
+ * Inference Engine for YoLoV5
+ * author@ vimal william 
+ * e-mail@ vimalwilliam99@gmail.com 
+*/
+
+#pragma once 
+#define CL_HPP_TARGET_OPENCL_VERSION 300
 #define INFERENG_HPP
+#ifdef INFERENG_HPP
 
-
-#include <onnxruntime/core/session/onnxruntime_cxx_api.h>
 #include <opencv2/opencv.hpp>
+#include <CL/opencl.hpp>
+
+#include <iostream>
+#include <string>
 #include <filesystem>
-#include <bits/stdc++.h>
 
-
-class GstAppSrcInfer{
+class Infera{
     private:
-        std::string BASEDIR = std::filesystem::current_path(); 
-        std::string modelPath = BASEDIR + "/yolo_nas_s_coco.onnx"; 
-        std::string instance {"Gstreamer-Appsrc-InferenceEngine"};
+        std::string BASE_DIR = std::filesystem::current_path(); 
+        std::string model_path = BASE_DIR + "/models/yolov5s.onnx"; 
 
-        Ort::Env env{nullptr}; 
-        Ort::Session session{nullptr};
-        Ort::SessionOptions sessionOptions{nullptr};
+        bool is_loaded = false; 
+        bool is_gpu = false; 
 
-        std::vector<std::vector<int64_t>> input_node_dims;
-        std::vector<std::vector<int64_t>> output_node_dims;
+        /*opencl params*/
+        std::vector<cl::Platform> platforms; 
+        std::vector<cl::Device> devices; 
 
-        std::vector<std::string> inputNamesString; 
-        std::vector<std::string> outputNamesString; 
-        std::vector<const char*> InputNames; 
-        std::vector<const char*> OutputNames;
-    
+        cv::dnn::Net net = nullptr;
+
     public:
-        GstAppSrcInfer(); 
-
-        void InferenceEngine(cv::Mat& frame); 
-        void GetInputDetails(Ort::AllocatorWithDefaultOptions allocator); 
-        void GetOutputDetails(Ort::AllocatorWithDefaultOptions allocator); 
-        void Preprocessor(cv::Mat& frame, float*& blob, std::vector<int64_t>& InputTensorShape);
-        void letterBox(cv::Mat& InputImage, cv::Mat& OuputImage);
-        void Postprocessor(std::vector<Ort::Value>& OuputTensor, int Org_width, int Org_height);
-        void GetBestClass(std::vector<float>::iterator& it, const int& numClasses, float& bestConf, int& bestClassId);
+        bool infera_load_model(); 
 };
 
-#endif /*INFERENG_HPP*/
+
+#endif
