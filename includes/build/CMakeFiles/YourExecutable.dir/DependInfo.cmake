@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/vimal/Vstream/includes/inferEng.cpp" "CMakeFiles/YourExecutable.dir/inferEng.cpp.o" "gcc" "CMakeFiles/YourExecutable.dir/inferEng.cpp.o.d"
+  "/home/vimal/Vstream/includes/infera.cpp" "CMakeFiles/YourExecutable.dir/infera.cpp.o" "gcc" "CMakeFiles/YourExecutable.dir/infera.cpp.o.d"
   "/home/vimal/Vstream/includes/testsuit.cpp" "CMakeFiles/YourExecutable.dir/testsuit.cpp.o" "gcc" "CMakeFiles/YourExecutable.dir/testsuit.cpp.o.d"
   )
 

@@ -16,7 +16,7 @@ find_package(GTest REQUIRED)
 find_package(OpenCL REQUIRED)
 
 # Add your source files
-add_executable(YourExecutable testsuit.cpp inferEng.cpp)
+add_executable(YourExecutable testsuit.cpp infera.cpp)
 
 # Link libraries
 target_link_libraries(YourExecutable ${OpenCV_LIBS} nlohmann_json::nlohmann_json GTest::GTest GTest::Main OpenCL::OpenCL)

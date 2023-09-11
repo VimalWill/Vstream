@@ -1,6 +1,6 @@
-CMakeFiles/YourExecutable.dir/inferEng.cpp.o: \
- /home/vimal/Vstream/includes/inferEng.cpp /usr/include/stdc-predef.h \
- /home/vimal/Vstream/includes/inferEng.hpp \
+CMakeFiles/YourExecutable.dir/infera.cpp.o: \
+ /home/vimal/Vstream/includes/infera.cpp /usr/include/stdc-predef.h \
+ /home/vimal/Vstream/includes/infera.hpp \
  /usr/local/include/opencv4/opencv2/opencv.hpp \
  /usr/local/include/opencv4/opencv2/opencv_modules.hpp \
  /usr/local/include/opencv4/opencv2/core.hpp \

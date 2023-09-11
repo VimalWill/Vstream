@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/YourExecutable.dir/inferEng.cpp.o"
-  "CMakeFiles/YourExecutable.dir/inferEng.cpp.o.d"
+  "CMakeFiles/YourExecutable.dir/infera.cpp.o"
+  "CMakeFiles/YourExecutable.dir/infera.cpp.o.d"
   "CMakeFiles/YourExecutable.dir/testsuit.cpp.o"
   "CMakeFiles/YourExecutable.dir/testsuit.cpp.o.d"
   "YourExecutable"

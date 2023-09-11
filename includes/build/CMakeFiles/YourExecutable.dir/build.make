@@ -83,30 +83,30 @@ CMakeFiles/YourExecutable.dir/testsuit.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/YourExecutable.dir/testsuit.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/vimal/Vstream/includes/testsuit.cpp -o CMakeFiles/YourExecutable.dir/testsuit.cpp.s
 
-CMakeFiles/YourExecutable.dir/inferEng.cpp.o: CMakeFiles/YourExecutable.dir/flags.make
-CMakeFiles/YourExecutable.dir/inferEng.cpp.o: /home/vimal/Vstream/includes/inferEng.cpp
-CMakeFiles/YourExecutable.dir/inferEng.cpp.o: CMakeFiles/YourExecutable.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vimal/Vstream/includes/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/YourExecutable.dir/inferEng.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/YourExecutable.dir/inferEng.cpp.o -MF CMakeFiles/YourExecutable.dir/inferEng.cpp.o.d -o CMakeFiles/YourExecutable.dir/inferEng.cpp.o -c /home/vimal/Vstream/includes/inferEng.cpp
+CMakeFiles/YourExecutable.dir/infera.cpp.o: CMakeFiles/YourExecutable.dir/flags.make
+CMakeFiles/YourExecutable.dir/infera.cpp.o: /home/vimal/Vstream/includes/infera.cpp
+CMakeFiles/YourExecutable.dir/infera.cpp.o: CMakeFiles/YourExecutable.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/vimal/Vstream/includes/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/YourExecutable.dir/infera.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/YourExecutable.dir/infera.cpp.o -MF CMakeFiles/YourExecutable.dir/infera.cpp.o.d -o CMakeFiles/YourExecutable.dir/infera.cpp.o -c /home/vimal/Vstream/includes/infera.cpp
 
-CMakeFiles/YourExecutable.dir/inferEng.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/YourExecutable.dir/inferEng.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/vimal/Vstream/includes/inferEng.cpp > CMakeFiles/YourExecutable.dir/inferEng.cpp.i
+CMakeFiles/YourExecutable.dir/infera.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/YourExecutable.dir/infera.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/vimal/Vstream/includes/infera.cpp > CMakeFiles/YourExecutable.dir/infera.cpp.i
 
-CMakeFiles/YourExecutable.dir/inferEng.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/YourExecutable.dir/inferEng.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/vimal/Vstream/includes/inferEng.cpp -o CMakeFiles/YourExecutable.dir/inferEng.cpp.s
+CMakeFiles/YourExecutable.dir/infera.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/YourExecutable.dir/infera.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/vimal/Vstream/includes/infera.cpp -o CMakeFiles/YourExecutable.dir/infera.cpp.s
 
 # Object files for target YourExecutable
 YourExecutable_OBJECTS = \
 "CMakeFiles/YourExecutable.dir/testsuit.cpp.o" \
-"CMakeFiles/YourExecutable.dir/inferEng.cpp.o"
+"CMakeFiles/YourExecutable.dir/infera.cpp.o"
 
 # External object files for target YourExecutable
 YourExecutable_EXTERNAL_OBJECTS =
 
 YourExecutable: CMakeFiles/YourExecutable.dir/testsuit.cpp.o
-YourExecutable: CMakeFiles/YourExecutable.dir/inferEng.cpp.o
+YourExecutable: CMakeFiles/YourExecutable.dir/infera.cpp.o
 YourExecutable: CMakeFiles/YourExecutable.dir/build.make
 YourExecutable: /usr/local/lib/libopencv_gapi.so.4.8.0
 YourExecutable: /usr/local/lib/libopencv_highgui.so.4.8.0

@@ -129,29 +129,29 @@ YourExecutable/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/build
 .PHONY : YourExecutable/fast
 
-inferEng.o: inferEng.cpp.o
-.PHONY : inferEng.o
+infera.o: infera.cpp.o
+.PHONY : infera.o
 
 # target to build an object file
-inferEng.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/inferEng.cpp.o
-.PHONY : inferEng.cpp.o
+infera.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/infera.cpp.o
+.PHONY : infera.cpp.o
 
-inferEng.i: inferEng.cpp.i
-.PHONY : inferEng.i
+infera.i: infera.cpp.i
+.PHONY : infera.i
 
 # target to preprocess a source file
-inferEng.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/inferEng.cpp.i
-.PHONY : inferEng.cpp.i
+infera.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/infera.cpp.i
+.PHONY : infera.cpp.i
 
-inferEng.s: inferEng.cpp.s
-.PHONY : inferEng.s
+infera.s: infera.cpp.s
+.PHONY : infera.s
 
 # target to generate assembly for a file
-inferEng.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/inferEng.cpp.s
-.PHONY : inferEng.cpp.s
+infera.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/infera.cpp.s
+.PHONY : infera.cpp.s
 
 testsuit.o: testsuit.cpp.o
 .PHONY : testsuit.o
@@ -186,9 +186,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... YourExecutable"
-	@echo "... inferEng.o"
-	@echo "... inferEng.i"
-	@echo "... inferEng.s"
+	@echo "... infera.o"
+	@echo "... infera.i"
+	@echo "... infera.s"
 	@echo "... testsuit.o"
 	@echo "... testsuit.i"
 	@echo "... testsuit.s"

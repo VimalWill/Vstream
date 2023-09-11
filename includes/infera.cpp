@@ -1,4 +1,4 @@
-#include "inferEng.hpp"
+#include "infera.hpp"
 
 /*func@  loads neural net & adaptive inference HW backend*/
 bool neural_engine::load_model(){

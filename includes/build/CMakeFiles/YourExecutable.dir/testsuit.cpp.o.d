@@ -270,7 +270,7 @@ CMakeFiles/YourExecutable.dir/testsuit.cpp.o: \
  /usr/local/include/gtest/gtest-typed-test.h \
  /usr/local/include/gtest/gtest_pred_impl.h \
  /usr/local/include/gtest/gtest_prod.h \
- /home/vimal/Vstream/includes/inferEng.hpp \
+ /home/vimal/Vstream/includes/infera.hpp \
  /usr/local/include/opencv4/opencv2/opencv.hpp \
  /usr/local/include/opencv4/opencv2/opencv_modules.hpp \
  /usr/local/include/opencv4/opencv2/core.hpp \

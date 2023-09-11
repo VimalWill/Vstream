@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "inferEng.hpp"
+#include "infera.hpp"
 
 /*func@ G-test for loading the neural net*/
 TEST(Infera_Test_Suit, model_load_test){
