@@ -17,4 +17,5 @@ Unit Tests are written for verifying the functions of Inference Engine and which
 $ mkdir build && cd build
 $ cmake ..
 $ make -j8
+$ ./Infera
 ```

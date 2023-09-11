@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(YourProjectName)
+project(Infera_test_suit)
 
 # Find OpenCV package
 find_package(OpenCV 4 REQUIRED)
@@ -16,7 +16,7 @@ find_package(GTest REQUIRED)
 find_package(OpenCL REQUIRED)
 
 # Add your source files
-add_executable(YourExecutable testsuit.cpp infera.cpp)
+add_executable(Infera testsuit.cpp infera.cpp)
 
 # Link libraries
-target_link_libraries(YourExecutable ${OpenCV_LIBS} nlohmann_json::nlohmann_json GTest::GTest GTest::Main OpenCL::OpenCL)
+target_link_libraries(Infera ${OpenCV_LIBS} nlohmann_json::nlohmann_json GTest::GTest GTest::Main OpenCL::OpenCL)
