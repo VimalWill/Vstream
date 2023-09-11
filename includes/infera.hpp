@@ -23,9 +23,14 @@ class neural_engine{
 
     public:
         bool load_model(); 
+        cv::Mat format2sq(cv::Mat& source); 
+        cv::Mat detect(cv::Mat& img); 
     
     private:
         cv::dnn::Net net; 
+
+        int INPUT_ROW = 640; 
+        int INPUT_COL = 640;
 
 };
 

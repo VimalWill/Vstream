@@ -63,7 +63,7 @@ CMAKE_BINARY_DIR = /home/vimal/Vstream/includes/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/YourExecutable.dir/all
+all: CMakeFiles/Infera.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -71,34 +71,34 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/YourExecutable.dir/clean
+clean: CMakeFiles/Infera.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/YourExecutable.dir
+# Target rules for target CMakeFiles/Infera.dir
 
 # All Build rule for target.
-CMakeFiles/YourExecutable.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/vimal/Vstream/includes/build/CMakeFiles --progress-num=1,2,3 "Built target YourExecutable"
-.PHONY : CMakeFiles/YourExecutable.dir/all
+CMakeFiles/Infera.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infera.dir/build.make CMakeFiles/Infera.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infera.dir/build.make CMakeFiles/Infera.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/vimal/Vstream/includes/build/CMakeFiles --progress-num=1,2,3 "Built target Infera"
+.PHONY : CMakeFiles/Infera.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/YourExecutable.dir/rule: cmake_check_build_system
+CMakeFiles/Infera.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/vimal/Vstream/includes/build/CMakeFiles 3
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/YourExecutable.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/Infera.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/vimal/Vstream/includes/build/CMakeFiles 0
-.PHONY : CMakeFiles/YourExecutable.dir/rule
+.PHONY : CMakeFiles/Infera.dir/rule
 
 # Convenience name for target.
-YourExecutable: CMakeFiles/YourExecutable.dir/rule
-.PHONY : YourExecutable
+Infera: CMakeFiles/Infera.dir/rule
+.PHONY : Infera
 
 # clean rule for target.
-CMakeFiles/YourExecutable.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/clean
-.PHONY : CMakeFiles/YourExecutable.dir/clean
+CMakeFiles/Infera.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infera.dir/build.make CMakeFiles/Infera.dir/clean
+.PHONY : CMakeFiles/Infera.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

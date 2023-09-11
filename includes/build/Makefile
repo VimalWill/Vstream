@@ -117,24 +117,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named YourExecutable
+# Target rules for targets named Infera
 
 # Build rule for target.
-YourExecutable: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 YourExecutable
-.PHONY : YourExecutable
+Infera: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Infera
+.PHONY : Infera
 
 # fast build rule for target.
-YourExecutable/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/build
-.PHONY : YourExecutable/fast
+Infera/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infera.dir/build.make CMakeFiles/Infera.dir/build
+.PHONY : Infera/fast
 
 infera.o: infera.cpp.o
 .PHONY : infera.o
 
 # target to build an object file
 infera.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/infera.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infera.dir/build.make CMakeFiles/Infera.dir/infera.cpp.o
 .PHONY : infera.cpp.o
 
 infera.i: infera.cpp.i
@@ -142,7 +142,7 @@ infera.i: infera.cpp.i
 
 # target to preprocess a source file
 infera.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/infera.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infera.dir/build.make CMakeFiles/Infera.dir/infera.cpp.i
 .PHONY : infera.cpp.i
 
 infera.s: infera.cpp.s
@@ -150,7 +150,7 @@ infera.s: infera.cpp.s
 
 # target to generate assembly for a file
 infera.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/infera.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infera.dir/build.make CMakeFiles/Infera.dir/infera.cpp.s
 .PHONY : infera.cpp.s
 
 testsuit.o: testsuit.cpp.o
@@ -158,7 +158,7 @@ testsuit.o: testsuit.cpp.o
 
 # target to build an object file
 testsuit.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/testsuit.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infera.dir/build.make CMakeFiles/Infera.dir/testsuit.cpp.o
 .PHONY : testsuit.cpp.o
 
 testsuit.i: testsuit.cpp.i
@@ -166,7 +166,7 @@ testsuit.i: testsuit.cpp.i
 
 # target to preprocess a source file
 testsuit.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/testsuit.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infera.dir/build.make CMakeFiles/Infera.dir/testsuit.cpp.i
 .PHONY : testsuit.cpp.i
 
 testsuit.s: testsuit.cpp.s
@@ -174,7 +174,7 @@ testsuit.s: testsuit.cpp.s
 
 # target to generate assembly for a file
 testsuit.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/YourExecutable.dir/build.make CMakeFiles/YourExecutable.dir/testsuit.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Infera.dir/build.make CMakeFiles/Infera.dir/testsuit.cpp.s
 .PHONY : testsuit.cpp.s
 
 # Help Target
@@ -185,7 +185,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... YourExecutable"
+	@echo "... Infera"
 	@echo "... infera.o"
 	@echo "... infera.i"
 	@echo "... infera.s"

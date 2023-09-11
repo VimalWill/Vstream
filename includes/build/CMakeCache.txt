@@ -148,7 +148,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=YourProjectName
+CMAKE_PROJECT_NAME:STATIC=Infera_test_suit
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/usr/bin/ranlib
@@ -217,6 +217,15 @@ CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //The directory containing a CMake configuration file for GTest.
 GTest_DIR:PATH=/usr/local/lib/cmake/GTest
+
+//Value Computed by CMake
+Infera_test_suit_BINARY_DIR:STATIC=/home/vimal/Vstream/includes/build
+
+//Value Computed by CMake
+Infera_test_suit_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+Infera_test_suit_SOURCE_DIR:STATIC=/home/vimal/Vstream/includes
 
 //Path to a file.
 OpenCL_INCLUDE_DIR:PATH=/usr/include
