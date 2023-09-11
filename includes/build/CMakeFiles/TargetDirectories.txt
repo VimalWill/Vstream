@@ -1,0 +1,3 @@
+/home/vimal/Vstream/includes/build/CMakeFiles/YourExecutable.dir
+/home/vimal/Vstream/includes/build/CMakeFiles/edit_cache.dir
+/home/vimal/Vstream/includes/build/CMakeFiles/rebuild_cache.dir

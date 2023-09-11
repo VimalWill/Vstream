@@ -1,38 +1,32 @@
 /**
- * Inference Engine for Vstream
+ * Infera - neural engine for Vstream 
  * author@ vimal william 
- * e-mail@ vimalwilliam99@gmail.com 
+ * email@ vimlwiliam99@gmail.com
 */
 
 #pragma once 
+#ifndef INFERA_HPP
+#define INFERA_HPP
+
 #define CL_HPP_TARGET_OPENCL_VERSION 300
-#define INFERENG_HPP
-#ifdef  INFERENG_HPP
 
 #include <opencv2/opencv.hpp>
 #include <nlohmann/json.hpp>
 #include <CL/opencl.hpp>
 
 #include <iostream>
+#include <fstream>
 #include <string>
-#include <filesystem>
+#include <vector>
 
-class Infera{
-    private:
-
-        bool is_loaded = false; 
-        bool is_gpu = false; 
-
-        /*opencl params*/
-        std::vector<cl::Platform> platforms; 
-        std::vector<cl::Device> devices; 
-
-        cv::dnn::Net net = nullptr;
+class neural_engine{
 
     public:
-        bool infera_load_model(); 
-        void neural_engine(cv::Mat& img); 
+        bool load_model(); 
+    
+    private:
+        cv::dnn::Net net; 
+
 };
 
-
-#endif /*INFERENG_HPP*/
+#endif /*INFERA_HPP*/
