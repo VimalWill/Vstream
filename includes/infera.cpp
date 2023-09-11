@@ -6,7 +6,7 @@ bool neural_engine::load_model(){
     bool is_load = false; 
     bool is_gpu = false; 
 
-    std::ifstream f("/home/vimal/Vstream/includes/config.json");
+    std::ifstream f("/home/vimal/Edge_ai/Vstream/includes/config.json");
     nlohmann::json data = nlohmann::json::parse(f);
     std::string model_path = data["model_path"];
 
@@ -60,7 +60,7 @@ cv::Mat neural_engine::format2sq(cv::Mat& source){
 cv::Mat neural_engine::detect(cv::Mat& img){
 
     cv::Mat temp = format2sq(img); 
-    cv::Mat blob =cv::dnn::blobFromImage(img, 1.0/255.f, cv::Size(INPUT_COL, INPUT_ROW), cv::Scalar(), true, false);
+    cv::Mat blob = cv::dnn::blobFromImage(temp, 1.0/255.0, cv::Size(INPUT_COL, INPUT_ROW), cv::Scalar(0), true, false); 
   
     return blob;
 }
