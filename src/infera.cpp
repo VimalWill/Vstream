@@ -1,14 +1,19 @@
 #include "infera.hpp"
 
+
+/*func@ constructor*/
+neural_engine::neural_engine(std::string path){
+    model_path = path;    
+}
+
+/*func@ destructor*/
+neural_engine::~neural_engine(){}; 
+
 /*func@  loads neural net & adaptive inference HW backend*/
 bool neural_engine::load_model(){
 
     bool is_load = false; 
     bool is_gpu = false; 
-
-    std::ifstream f("/home/vimal/Edge_ai/Vstream/includes/config.json");
-    nlohmann::json data = nlohmann::json::parse(f);
-    std::string model_path = data["model_path"];
 
     net = cv::dnn::readNetFromONNX(model_path);
     if (!net.empty()){
