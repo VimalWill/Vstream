@@ -52,20 +52,24 @@ bool neural_engine::load_model(){
 
 /*func@ Square fit the input image*/
 cv::Mat neural_engine::format2sq(cv::Mat& source){
-    int row = source.rows; 
-    int col = source.cols; 
-
-    int _max = MAX(row, col); 
-    cv::Mat result = cv::Mat::zeros(_max, _max, CV_8UC3); 
-    source.copyTo(result(cv::Rect(0, 0, col, row))); 
-    
-    return result; 
+    int col = source.cols;
+    int row = source.rows;
+    int _max = MAX(col, row);
+    cv::Mat result = cv::Mat::zeros(_max, _max, CV_8UC3);
+    source.copyTo(result(cv::Rect(0, 0, col, row)));
+    return result;
 }
 
 cv::Mat neural_engine::detect(cv::Mat& img){
 
-    cv::Mat temp = format2sq(img); 
-    cv::Mat blob = cv::dnn::blobFromImage(temp, 1.0/255.0, cv::Size(INPUT_COL, INPUT_ROW), cv::Scalar(0), true, false); 
-  
-    return blob;
+    cv::Mat modelInput = format2sq(img);
+
+    cv::Mat blob;
+    cv::dnn::blobFromImage(modelInput, blob, 1.0/255.0, cv::Size(640, 640), cv::Scalar(), true, false);
+    net.setInput(blob);
+
+    std::vector<cv::Mat> outputs;
+    net.forward(outputs, net.getUnconnectedOutLayersNames());
+    return outputs[0]; 
+
 }

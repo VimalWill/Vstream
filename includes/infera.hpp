@@ -33,8 +33,16 @@ class neural_engine{
         cv::dnn::Net net; 
         std::string model_path; 
 
-        int INPUT_ROW = 640; 
-        int INPUT_COL = 640;
+        int INPUT_HEIGHT = 640; 
+        int INPUT_WIDTH = 640;
+
+        struct Detection
+        {
+            int class_id; 
+            float confidence; 
+            cv::Rect boxe; 
+        };
+        
 
 };
 

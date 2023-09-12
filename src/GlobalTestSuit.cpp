@@ -5,7 +5,7 @@
 
 /*func@ testsuit for loading model*/
 TEST(Vstream_global_testsuit, model_load_test){
-    neural_engine infera("../model/yolov5s.onnx"); 
+    neural_engine infera("../model/yolov8.onnx"); 
     bool load = infera.load_model(); 
 
     EXPECT_TRUE(load); 
@@ -13,13 +13,25 @@ TEST(Vstream_global_testsuit, model_load_test){
 
 /*func@ testsuit for fomat image*/
 TEST(Vstream_global_testsuit, format_test){
-    neural_engine infera("../model/yolov5s.onnx"); 
+    neural_engine infera("../model/yolov8.onnx"); 
     cv::Mat img = cv::imread("../images/test.jpeg"); 
+
+    cv::Mat result = infera.format2sq(img); 
     
-    ASSERT_FALSE(img.empty()); 
-    ASSERT_EQ(3, img.channels()); 
+    ASSERT_FALSE(result.empty()); 
+    ASSERT_EQ(3, result.channels()); 
 }
 
+TEST(Vstream_global_testsuit, detect_test){
+    neural_engine infera("../model/yolov8.onnx"); 
+    bool load = infera.load_model(); 
+    cv::Mat img = cv::imread("../images/test.jpeg"); 
+
+    cv::Mat result = infera.detect(img); 
+    ASSERT_FALSE(result.empty()); 
+    EXPECT_TRUE(load); 
+
+}
 
 int main(){
     testing::InitGoogleTest(); 
