@@ -29,6 +29,7 @@ TEST(Vstream_global_testsuit, detect_test){
 
     cv::Mat result = infera.detect(img); 
     ASSERT_FALSE(result.empty()); 
+    ASSERT_EQ(3, result.channels());
     EXPECT_TRUE(load); 
 
 }

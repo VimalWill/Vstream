@@ -40,10 +40,9 @@ class neural_engine{
         {
             int class_id; 
             float confidence; 
-            cv::Rect boxe; 
+            cv::Rect box; 
         };
         
-
 };
 
 #endif /*INFERA_HPP*/
