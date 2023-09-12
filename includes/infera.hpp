@@ -22,16 +22,27 @@
 class neural_engine{
 
     public:
+        neural_engine(std::string path); 
         bool load_model(); 
         cv::Mat format2sq(cv::Mat& source); 
         cv::Mat detect(cv::Mat& img); 
+
+        ~neural_engine(); 
     
     private:
         cv::dnn::Net net; 
+        std::string model_path; 
 
-        int INPUT_ROW = 640; 
-        int INPUT_COL = 640;
+        int INPUT_HEIGHT = 640; 
+        int INPUT_WIDTH = 640;
 
+        struct Detection
+        {
+            int class_id; 
+            float confidence; 
+            cv::Rect box; 
+        };
+        
 };
 
 #endif /*INFERA_HPP*/

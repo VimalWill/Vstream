@@ -1,3 +1,0 @@
-/home/vimal/Vstream/includes/build/CMakeFiles/Infera.dir
-/home/vimal/Vstream/includes/build/CMakeFiles/edit_cache.dir
-/home/vimal/Vstream/includes/build/CMakeFiles/rebuild_cache.dir
