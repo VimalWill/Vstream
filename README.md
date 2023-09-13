@@ -10,7 +10,7 @@ The pipeline is constructed on the top of Neural-Net Inference Engine called "In
 - Google-Test for C++
 - Standard C++ 17
 
-<h2> Build VStream </h2>
+<h2> Build Procedure for Vstream </h2>
 The building process for Vstream handles building both Test-suit for Infera and Final Executable for the Vstream
 
 ```
