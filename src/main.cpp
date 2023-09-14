@@ -5,9 +5,43 @@
 #include "infera.hpp"
 
 #include <opencv2/opencv.hpp>
+#include <queue>
+#include <thread>
+#include <mutex>
+
+std::mutex mtx; 
 
 static GMainLoop *loop; 
 neural_engine infera("../model/yolov8.onnx");
+
+
+
+std::queue<cv::Mat> infera_frames; 
+int width = 0, height = 0, channel = 0; 
+/*func@ loads images into the queue*/
+void load_frame(){
+
+    std::cout << "[+]image loader thread initalized" << std::endl;
+    infera.load_model();
+    cv::VideoCapture cap("/dev/video0"); 
+    cv::Mat frame; 
+    if (cap.isOpened()){
+        while(true){
+            cap.read(frame); 
+
+            /*meta-data verification*/
+            width = frame.cols; 
+            height = frame.rows; 
+            channel = frame.channels(); 
+
+            cv::Mat infera_output = infera.detect(frame);
+            infera_frames.push(infera_output);
+        }
+    }else{
+        perror("failed to open capture device"); 
+    }
+    cap.release();
+}
 
 static void
 prepare_buffer(GstAppSrc* appsrc){
@@ -16,13 +50,10 @@ prepare_buffer(GstAppSrc* appsrc){
     GstBuffer *buffer; 
     GstFlowReturn ret; 
 
-    cv::VideoCapture cap("/dev/video0"); 
-    if(cap.isOpened()){
+    if(!infera_frames.empty()){
 
-        cv::Mat frame; 
-        cap.read(frame); 
-
-        cv::Mat img = infera.detect(frame);
+        cv::Mat img = infera_frames.front();
+        infera_frames.pop();
 
         guint buffer_size = img.rows * img.cols * img.channels(); 
         buffer = gst_buffer_new_allocate(NULL, buffer_size, NULL); 
@@ -38,7 +69,6 @@ prepare_buffer(GstAppSrc* appsrc){
             g_main_loop_quit(loop); 
         }
     }
-    cap.release();
 }
 
 static void 
@@ -49,18 +79,11 @@ cb_need_data(GstElement *appsrc, guint unused_size, gpointer user_data){
 
 int main()
 {
+  
+  std::thread t1(load_frame); 
+  t1.detach();
     
-  infera.load_model();
-  
   GstElement *pipeline, *appsrc, *conv, *videosink;
-
-  cv::VideoCapture cap("/dev/video0"); 
-  cv::Mat frame; 
-  
-  cap.read(frame); 
-  cap.release(); 
-  int width = frame.cols; 
-  int height = frame.rows; 
 
   /* init GStreamer */
   gst_init (NULL, NULL);
