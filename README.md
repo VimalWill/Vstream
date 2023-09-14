@@ -25,4 +25,10 @@ $ make -j64
 - Adapative Hardware Offloading of Hardware for Inference 
 - Hardware Accelerated Video Compression for network stream (on-progress)
 
+<h3> To-Dos</h3>
+
+- Hardware acceleration for video encoding
+- Network Streaming 
+- Object Tracking
+
 
