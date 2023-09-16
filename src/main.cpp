@@ -13,35 +13,7 @@ std::mutex mtx;
 
 static GMainLoop *loop; 
 neural_engine infera("../model/yolov8.onnx");
-
-
-
-std::queue<cv::Mat> infera_frames; 
-int width = 0, height = 0, channel = 0; 
-/*func@ loads images into the queue*/
-void load_frame(){
-
-    std::cout << "[+]image loader thread initalized" << std::endl;
-    infera.load_model();
-    cv::VideoCapture cap("/dev/video0"); 
-    cv::Mat frame; 
-    if (cap.isOpened()){
-        while(true){
-            cap.read(frame); 
-
-            /*meta-data verification*/
-            width = frame.cols; 
-            height = frame.rows; 
-            channel = frame.channels(); 
-
-            cv::Mat infera_output = infera.detect(frame);
-            infera_frames.push(infera_output);
-        }
-    }else{
-        perror("failed to open capture device"); 
-    }
-    cap.release();
-}
+cv::VideoCapture cap("../images/video (720p).mp4");
 
 static void
 prepare_buffer(GstAppSrc* appsrc){
@@ -50,10 +22,13 @@ prepare_buffer(GstAppSrc* appsrc){
     GstBuffer *buffer; 
     GstFlowReturn ret; 
 
-    if(!infera_frames.empty()){
+    cv::Mat frame; 
+    cv::Mat img; 
 
-        cv::Mat img = infera_frames.front();
-        infera_frames.pop();
+    if(cap.isOpened()){
+
+        cap.read(frame);
+        img = infera.detect(frame);
 
         guint buffer_size = img.rows * img.cols * img.channels(); 
         buffer = gst_buffer_new_allocate(NULL, buffer_size, NULL); 
@@ -80,8 +55,11 @@ cb_need_data(GstElement *appsrc, guint unused_size, gpointer user_data){
 int main()
 {
   
-  std::thread t1(load_frame); 
-  t1.detach();
+  if(!infera.load_model())
+    perror("[-]error in loading model");
+
+  int width = cap.get(cv::CAP_PROP_FRAME_WIDTH);
+  int height = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
     
   GstElement *pipeline, *appsrc, *conv, *videosink;
 
@@ -93,6 +71,7 @@ int main()
   pipeline = gst_pipeline_new ("pipeline");
   appsrc = gst_element_factory_make ("appsrc", "source");
   conv = gst_element_factory_make ("videoconvert", "conv");
+  //enc = gst_element_factory_make ("x264enc", "enc");
   videosink = gst_element_factory_make ("autovideosink", "videosink");
 
   /* setup */
@@ -120,6 +99,8 @@ int main()
   gst_element_set_state (pipeline, GST_STATE_NULL);
   gst_object_unref (GST_OBJECT (pipeline));
   g_main_loop_unref (loop);
+
+  cap.release();
 
   return 0;
   }
