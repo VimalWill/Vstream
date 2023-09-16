@@ -5,43 +5,10 @@
 #include "infera.hpp"
 
 #include <opencv2/opencv.hpp>
-#include <queue>
-#include <thread>
-#include <mutex>
-
-std::mutex mtx; 
 
 static GMainLoop *loop; 
 neural_engine infera("../model/yolov8.onnx");
-
-
-
-std::queue<cv::Mat> infera_frames; 
-int width = 0, height = 0, channel = 0; 
-/*func@ loads images into the queue*/
-void load_frame(){
-
-    std::cout << "[+]image loader thread initalized" << std::endl;
-    infera.load_model();
-    cv::VideoCapture cap("/dev/video0"); 
-    cv::Mat frame; 
-    if (cap.isOpened()){
-        while(true){
-            cap.read(frame); 
-
-            /*meta-data verification*/
-            width = frame.cols; 
-            height = frame.rows; 
-            channel = frame.channels(); 
-
-            cv::Mat infera_output = infera.detect(frame);
-            infera_frames.push(infera_output);
-        }
-    }else{
-        perror("failed to open capture device"); 
-    }
-    cap.release();
-}
+cv::VideoCapture cap("/dev/video0");
 
 static void
 prepare_buffer(GstAppSrc* appsrc){
@@ -50,24 +17,23 @@ prepare_buffer(GstAppSrc* appsrc){
     GstBuffer *buffer; 
     GstFlowReturn ret; 
 
-    if(!infera_frames.empty()){
+    cv::Mat frame; 
+    cap.read(frame); 
 
-        cv::Mat img = infera_frames.front();
-        infera_frames.pop();
+    cv::Mat img = infera.detect(frame);
 
-        guint buffer_size = img.rows * img.cols * img.channels(); 
-        buffer = gst_buffer_new_allocate(NULL, buffer_size, NULL); 
-        gst_buffer_fill(buffer, 0, img.data, buffer_size); 
+    guint buffer_size = img.rows * img.cols * img.channels(); 
+    buffer = gst_buffer_new_allocate(NULL, buffer_size, NULL); 
+    gst_buffer_fill(buffer, 0, img.data, buffer_size); 
 
-        GST_BUFFER_PTS (buffer) = timestamp;
-        GST_BUFFER_DURATION (buffer) = gst_util_uint64_scale_int (1, GST_SECOND, 2);
-        timestamp += GST_BUFFER_DURATION (buffer);
+    GST_BUFFER_PTS (buffer) = timestamp;
+    GST_BUFFER_DURATION (buffer) = gst_util_uint64_scale_int (1, GST_SECOND, 2);
+    timestamp += GST_BUFFER_DURATION (buffer);
 
-        ret = gst_app_src_push_buffer(appsrc, buffer); 
+    ret = gst_app_src_push_buffer(appsrc, buffer); 
 
-        if(ret != GST_FLOW_OK){
-            g_main_loop_quit(loop); 
-        }
+    if(ret != GST_FLOW_OK){
+        g_main_loop_quit(loop); 
     }
 }
 
@@ -79,12 +45,13 @@ cb_need_data(GstElement *appsrc, guint unused_size, gpointer user_data){
 
 int main()
 {
-  
-  std::thread t1(load_frame); 
-  t1.detach();
     
-  GstElement *pipeline, *appsrc, *conv, *videosink;
+  infera.load_model();
+  
+  GstElement *pipeline, *appsrc, *conv, *videosink, *queue1;
 
+  int width = cap.get(cv::CAP_PROP_FRAME_WIDTH); 
+  int height = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
   /* init GStreamer */
   gst_init (NULL, NULL);
   loop = g_main_loop_new (NULL, FALSE);
@@ -94,17 +61,20 @@ int main()
   appsrc = gst_element_factory_make ("appsrc", "source");
   conv = gst_element_factory_make ("videoconvert", "conv");
   videosink = gst_element_factory_make ("autovideosink", "videosink");
+  queue1 = gst_element_factory_make ("queue", "queue1");
 
   /* setup */
   g_object_set (G_OBJECT (appsrc), "caps",
   		gst_caps_new_simple ("video/x-raw",
+                     "is-live", G_TYPE_BOOLEAN, TRUE,
+                     "max-buffers", G_TYPE_UINT64,30, 
 				     "format", G_TYPE_STRING, "BGR",
 				     "width", G_TYPE_INT, width,
 				     "height", G_TYPE_INT, height,
 				     "framerate", GST_TYPE_FRACTION, 0, 1,
 				     NULL), NULL);
-  gst_bin_add_many (GST_BIN (pipeline), appsrc, conv, videosink, NULL);
-  gst_element_link_many (appsrc, conv, videosink, NULL);
+  gst_bin_add_many (GST_BIN (pipeline), appsrc, queue1, conv, videosink, NULL);
+  gst_element_link_many (appsrc, queue1, conv, videosink, NULL);
 
   /* setup appsrc */
   g_object_set (G_OBJECT (appsrc),
@@ -120,6 +90,8 @@ int main()
   gst_element_set_state (pipeline, GST_STATE_NULL);
   gst_object_unref (GST_OBJECT (pipeline));
   g_main_loop_unref (loop);
+
+  cap.release();
 
   return 0;
   }
