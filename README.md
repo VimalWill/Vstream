@@ -10,7 +10,7 @@ The pipeline is constructed on the top of Neural-Net Inference Engine called "In
 - Google-Test for C++
 - Standard C++ 17
 
-<h2> Build VStream </h2>
+<h2> Build Procedure for Vstream </h2>
 The building process for Vstream handles building both Test-suit for Infera and Final Executable for the Vstream
 
 ```
@@ -24,5 +24,11 @@ $ make -j64
 
 - Adapative Hardware Offloading of Hardware for Inference 
 - Hardware Accelerated Video Compression for network stream (on-progress)
+
+<h3> To-Dos</h3>
+
+- Hardware acceleration for video encoding
+- Network Streaming 
+- Object Tracking
 
 
