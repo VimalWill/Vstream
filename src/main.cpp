@@ -5,11 +5,6 @@
 #include "infera.hpp"
 
 #include <opencv2/opencv.hpp>
-#include <queue>
-#include <thread>
-#include <mutex>
-
-std::mutex mtx; 
 
 static GMainLoop *loop; 
 neural_engine infera("../model/yolov8.onnx");
