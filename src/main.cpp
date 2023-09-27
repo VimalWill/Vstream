@@ -18,22 +18,26 @@ prepare_buffer(GstAppSrc* appsrc){
     GstFlowReturn ret; 
 
     cv::Mat frame; 
-    cap.read(frame); 
+    cv::Mat img; 
 
-    cv::Mat img = infera.detect(frame);
+    if(cap.isOpened()){
 
-    guint buffer_size = img.rows * img.cols * img.channels(); 
-    buffer = gst_buffer_new_allocate(NULL, buffer_size, NULL); 
-    gst_buffer_fill(buffer, 0, img.data, buffer_size); 
+        cap.read(frame);
+        img = infera.detect(frame);
 
-    GST_BUFFER_PTS (buffer) = timestamp;
-    GST_BUFFER_DURATION (buffer) = gst_util_uint64_scale_int (1, GST_SECOND, 2);
-    timestamp += GST_BUFFER_DURATION (buffer);
+        guint buffer_size = img.rows * img.cols * img.channels(); 
+        buffer = gst_buffer_new_allocate(NULL, buffer_size, NULL); 
+        gst_buffer_fill(buffer, 0, img.data, buffer_size); 
 
-    ret = gst_app_src_push_buffer(appsrc, buffer); 
+        GST_BUFFER_PTS (buffer) = timestamp;
+        GST_BUFFER_DURATION (buffer) = gst_util_uint64_scale_int (1, GST_SECOND, 2);
+        timestamp += GST_BUFFER_DURATION (buffer);
 
-    if(ret != GST_FLOW_OK){
-        g_main_loop_quit(loop); 
+        ret = gst_app_src_push_buffer(appsrc, buffer); 
+
+        if(ret != GST_FLOW_OK){
+            g_main_loop_quit(loop); 
+        }
     }
 }
 
@@ -45,13 +49,15 @@ cb_need_data(GstElement *appsrc, guint unused_size, gpointer user_data){
 
 int main()
 {
-    
-  infera.load_model();
   
-  GstElement *pipeline, *appsrc, *conv, *videosink, *queue1;
+  if(!infera.load_model())
+        perror("[-]error in loading model");
 
-  int width = cap.get(cv::CAP_PROP_FRAME_WIDTH); 
+  int width = cap.get(cv::CAP_PROP_FRAME_WIDTH);
   int height = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
+    
+  GstElement *pipeline, *appsrc, *conv, *videosink;
+
   /* init GStreamer */
   gst_init (NULL, NULL);
   loop = g_main_loop_new (NULL, FALSE);
@@ -60,21 +66,19 @@ int main()
   pipeline = gst_pipeline_new ("pipeline");
   appsrc = gst_element_factory_make ("appsrc", "source");
   conv = gst_element_factory_make ("videoconvert", "conv");
+  //enc = gst_element_factory_make ("x264enc", "enc");
   videosink = gst_element_factory_make ("autovideosink", "videosink");
-  queue1 = gst_element_factory_make ("queue", "queue1");
 
   /* setup */
   g_object_set (G_OBJECT (appsrc), "caps",
   		gst_caps_new_simple ("video/x-raw",
-                     "is-live", G_TYPE_BOOLEAN, TRUE,
-                     "max-buffers", G_TYPE_UINT64,30, 
 				     "format", G_TYPE_STRING, "BGR",
 				     "width", G_TYPE_INT, width,
 				     "height", G_TYPE_INT, height,
 				     "framerate", GST_TYPE_FRACTION, 0, 1,
 				     NULL), NULL);
-  gst_bin_add_many (GST_BIN (pipeline), appsrc, queue1, conv, videosink, NULL);
-  gst_element_link_many (appsrc, queue1, conv, videosink, NULL);
+  gst_bin_add_many (GST_BIN (pipeline), appsrc, conv, videosink, NULL);
+  gst_element_link_many (appsrc, conv, videosink, NULL);
 
   /* setup appsrc */
   g_object_set (G_OBJECT (appsrc),

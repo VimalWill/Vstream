@@ -89,7 +89,7 @@ cv::Mat neural_engine::detect(cv::Mat& img){
     for(int i = 0; i < row; ++i){
         
         float *classes_scores = data + 4; 
-        cv::Mat scores(1, 80, CV_32FC1, classes_scores);
+        cv::Mat scores(1, classes.size(), CV_32FC1, classes_scores);
         cv::Point class_id;
         double maxClassScore;
 
@@ -126,9 +126,18 @@ cv::Mat neural_engine::detect(cv::Mat& img){
 
         int idx = nms_results[i]; 
         Detection results; 
-        results.class_id = class_ids[i]; 
-        results.confidence = confs[i];
+
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<int> dis(100, 255);
+        results.color = cv::Scalar(dis(gen),
+                                  dis(gen),
+                                  dis(gen));
+
+        results.class_id = class_ids[idx]; 
+        results.confidence = confs[idx];
         results.box = boxes[idx];
+        results.className = classes[results.class_id];
 
         detection.push_back(results);
     }
@@ -137,7 +146,15 @@ cv::Mat neural_engine::detect(cv::Mat& img){
     /*draw the bounding box*/
     for(int j=0; j<detection.size(); ++j){
         Detection detector = detection[j]; 
-        cv::rectangle(infera_ouput, detector.box, cv::Scalar(0, 0, 255), 2); 
+        cv::rectangle(infera_ouput, detector.box, detector.color, 2); 
+
+        std::string classString = detector.className + ' ' + std::to_string(detector.confidence).substr(0, 4);
+        cv::Size textSize = cv::getTextSize(classString, cv::FONT_HERSHEY_DUPLEX, 1, 2, 0);
+        cv::Rect textBox(detector.box.x, detector.box.y - 40, textSize.width + 10, textSize.height + 20);
+
+        cv::rectangle(infera_ouput, textBox, detector.color, cv::FILLED);
+        cv::putText(infera_ouput, classString, cv::Point(detector.box.x + 5, detector.box.y - 10), cv::FONT_HERSHEY_DUPLEX, 1, cv::Scalar(0, 0, 0), 2, 0);
+
 
     }
 
