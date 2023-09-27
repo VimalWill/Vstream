@@ -13,7 +13,7 @@ std::mutex mtx;
 
 static GMainLoop *loop; 
 neural_engine infera("../model/yolov8.onnx");
-cv::VideoCapture cap("../images/video (720p).mp4");
+cv::VideoCapture cap("/dev/video0");
 
 static void
 prepare_buffer(GstAppSrc* appsrc){
@@ -56,7 +56,7 @@ int main()
 {
   
   if(!infera.load_model())
-    perror("[-]error in loading model");
+        perror("[-]error in loading model");
 
   int width = cap.get(cv::CAP_PROP_FRAME_WIDTH);
   int height = cap.get(cv::CAP_PROP_FRAME_HEIGHT);
