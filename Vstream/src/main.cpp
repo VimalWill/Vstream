@@ -49,7 +49,7 @@ cb_need_data(GstElement *appsrc, guint unused_size, gpointer user_data){
 
 int main()
 {
-  
+  std::cout << CV_VERSION << std::endl;
   if(!infera.load_model())
         perror("[-]error in loading model");
 
