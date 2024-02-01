@@ -1,4 +1,0 @@
-/home/vimal/personal/Vstream-YoLoV8-GStreamer/Vstream/build/CMakeFiles/TestSuit.dir
-/home/vimal/personal/Vstream-YoLoV8-GStreamer/Vstream/build/CMakeFiles/Vstream.dir
-/home/vimal/personal/Vstream-YoLoV8-GStreamer/Vstream/build/CMakeFiles/edit_cache.dir
-/home/vimal/personal/Vstream-YoLoV8-GStreamer/Vstream/build/CMakeFiles/rebuild_cache.dir

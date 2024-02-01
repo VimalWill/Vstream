@@ -39,4 +39,5 @@ target_link_libraries(Vstream
     ${OpenCV_LIBS}
     OpenCL::OpenCL
     gstapp-1.0
+    -pthread
 )
