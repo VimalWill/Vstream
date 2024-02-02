@@ -14,15 +14,12 @@ neural_engine infera("../model/yolov8.onnx");
 
 struct _streamparams{
     cv::VideoCapture cap;
-    GstBuffer* buffer; 
     std::queue<cv::Mat> comman_queue; 
-    cv::Mat frame_inital; 
     guint buffer_size = 0; 
 }streamparams; 
 
-
-/*independent producer for capture and store*/
 void cv_producer(){
+
     while(true){
         cv::Mat frame; 
         streamparams.cap.read(frame); 
@@ -33,16 +30,19 @@ void cv_producer(){
     streamparams.cap.release();
 }
 
-
 static void
 prepare_buffer(GstAppSrc* appsrc){
     
     static GstClockTime timestamp = 0; 
     GstFlowReturn ret; 
+    GstMapInfo info; 
+    cv::Mat frame; 
+    gint idx = 0; 
 
-    streamparams.frame_inital = streamparams.comman_queue.back(); 
+    GstBuffer* buffer = gst_buffer_new_allocate(NULL, streamparams.buffer_size, NULL); 
+    frame = streamparams.comman_queue.back(); 
     auto start = std::chrono::high_resolution_clock::now();
-    streamparams.frame_inital = infera.detect(streamparams.frame_inital);
+    frame = infera.detect(frame);
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = end - start;
     std::cout << "Inference Time: " << duration.count() << " seconds" << std::endl;
@@ -52,18 +52,24 @@ prepare_buffer(GstAppSrc* appsrc){
 
     // guint buffer_size = img.rows * img.cols * img.channels(); 
     // buffer = gst_buffer_new_allocate(NULL, buffer_size, NULL); 
-    gst_buffer_fill(streamparams.buffer, 0, streamparams.frame_inital.data, streamparams.buffer_size); 
+    // gst_buffer_fill(streamparams.buffer, 0, streamparams.frame_inital.data, streamparams.buffer_size); 
 
-    GST_BUFFER_PTS (streamparams.buffer) = timestamp;
-    GST_BUFFER_DURATION (streamparams.buffer) = gst_util_uint64_scale_int (1, GST_SECOND, 2);
-    timestamp += GST_BUFFER_DURATION (streamparams.buffer);
 
-    ret = gst_app_src_push_buffer(appsrc, streamparams.buffer); 
+    gst_buffer_map(buffer, &info, GST_MAP_WRITE); 
+    unsigned char* buf = info.data; 
+    memmove(buf, frame.data, streamparams.buffer_size); 
+    gst_buffer_unmap(buffer, &info); 
+
+    GST_BUFFER_PTS (buffer) = timestamp;
+    GST_BUFFER_DURATION (buffer) = gst_util_uint64_scale_int (1, GST_SECOND, 2);
+    timestamp += GST_BUFFER_DURATION (buffer);
+    ret = gst_app_src_push_buffer(appsrc, buffer);  
 
     if(ret != GST_FLOW_OK){
         g_main_loop_quit(loop); 
-        
+            
     }
+
 }
 
 static void 
@@ -73,13 +79,12 @@ cb_need_data(GstElement *appsrc, guint unused_size, gpointer user_data){
 }
 
 int main()
-{
+{ 
   /*gstBuffer allocation*/
   streamparams.cap.open("/dev/video0");
   cv::Mat ref_frame; 
   streamparams.cap.read(ref_frame); 
   streamparams.buffer_size = ref_frame.rows * ref_frame.cols * ref_frame.channels(); 
-  streamparams.buffer = gst_buffer_new_allocate(NULL, streamparams.buffer_size, NULL); 
 
   std::thread queue_t(cv_producer); 
   queue_t.detach(); 
@@ -101,7 +106,7 @@ int main()
   conv = gst_element_factory_make ("videoconvert", "conv");
   //enc = gst_element_factory_make ("x264enc", "enc");
   videosink = gst_element_factory_make ("fpsdisplaysink", "videosink");
-
+  
   /* setup */
   g_object_set (G_OBJECT (appsrc), "caps",
   		gst_caps_new_simple ("video/x-raw",
@@ -116,7 +121,8 @@ int main()
   /* setup appsrc */
   g_object_set (G_OBJECT (appsrc),
 		"stream-type", 0,
-		"format", GST_FORMAT_TIME, NULL);
+		"format", GST_FORMAT_TIME,
+        "is-live", true, NULL);
   g_signal_connect (appsrc, "need-data", G_CALLBACK (cb_need_data), NULL);
 
   /* play */
